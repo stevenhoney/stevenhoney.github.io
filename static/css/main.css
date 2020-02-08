@@ -1,5 +1,5 @@
 body {
-  font-family: "Roboto Condensed", Arial, sans-serif;
+  font-family: "Lato", Arial, sans-serif;
   background: url("/static/img/subtle_dots.png");
   line-height: 1.5em;
   font-weight: 300;
@@ -19,8 +19,9 @@ span.time, span.categories {
   font-size: 11px;
 }
 h1, h2, h3 {
+  font-family: "Montserrat", Arial, sans-serif;
   color: #696969;
-  font-weight: normal;
+  font-weight: 500;
 }
 h1 {
   margin-bottom: 10px;
