@@ -1,78 +1,80 @@
-# Jekyll-Bootstrap
+## My Stack Problems
 
-The quickest way to start and publish your Jekyll powered blog. 100% compatible with GitHub pages
+> This project forked and has been modified from [A simple grey theme for Jekyll](https://github.com/liamsymonds/simplygrey-jekyll),
+> and the search posts using [Super Search](https://github.com/chinchang/super-search)
 
-## Usage
+### Demo
+* [https://agusmakmun.github.io](https://agusmakmun.github.io)
 
-For all usage and documentation please see: <http://jekyllbootstrap.com>
+#### Features
 
-## Version
+* Sitemap and XML Feed
+* Pagination in homepage
+* Posts under category
+* Realtime Search Posts _(title & description)_ by query.
+* Related Posts
+* Highlight pre
+* Next & Previous Post
+* Disqus comment
+* Projects page & Detail Project page
+* Share on social media
+* Google analytics
+* HTML Minify _(Compress HTML)_ using [Jekyll Compress HTML](https://github.com/penibelst/jekyll-compress-html)
 
-0.3.0 - stable and versioned using [semantic versioning](http://semver.org/).
+#### Screenshot
 
-**NOTE:** 0.3.0 introduces a new theme which is not backwards compatible in the sense it won't _look_ like the old version.
-However, the actual API has not changed at all.
-You might want to run 0.3.0 in a branch to make sure you are ok with the theme design changes.
+![Screenshot Post Page](https://raw.githubusercontent.com/agusmakmun/agusmakmun.github.io/master/static/img/screenshot-post-page.png  "Screenshot Post Page")
 
-## Milestones
+### Install & Configuration
 
-[0.4.0](https://github.com/plusjade/jekyll-bootstrap/milestones/v%200.4.0) - next release [ETA 03/29/2015]
+1. Fork this repository
+2. Edit site settings inside file of `_config.yml`
+3. Edit your projects at file of `projects.md`, `_data/projects.json` and inside path of `_project/` _(for detail project)_.
+4. Edit about yourself inside file of `about.md`
 
-### GOALS
+### How to Use?
 
-* No open PRs against master branch.
-* Squash some bugs.
-* Add some new features (low-hanging fruit).
-* Establish social media presence.
+**a. Add new Category**
 
+All categories saved inside path of `category/`, you can see the existed categories.
 
-### Bugs
+**b. Add new Posts**
 
-|Bug |Description
-|------|---------------
-|[#86](https://github.com/plusjade/jekyll-bootstrap/issues/86)  |&#x2611; Facebook Comments
-|[#113](https://github.com/plusjade/jekyll-bootstrap/issues/113)|&#x2611; ASSET_PATH w/ page & post
-|[#144](https://github.com/plusjade/jekyll-bootstrap/issues/144)|&#x2610; BASE_PATH w/ FQDN
-|[#227](https://github.com/plusjade/jekyll-bootstrap/issues/227)|&#x2611; Redundant JB/setup
+* All posts bassed on markdown syntax _(please googling)_. allowed extensions is `*.markdown` or `*.md`.
+* This files can found at the path of `_posts/`.
+* and the name of files are following `<date:%Y-%m-%d>-<slug>.<extension>`, for example:
 
-### Features
+```
+2013-09-23-welcome-to-jekyll.md
 
-|Bug |Description
-|------|---------------
-|[#98](https://github.com/plusjade/jekyll-bootstrap/issues/98)  |&#x2611; GIST Integration
-|[#244](https://github.com/plusjade/jekyll-bootstrap/issues/244)|&#x2611; JB/file_exists Helper
-|[#42](https://github.com/plusjade/jekyll-bootstrap/issues/42)  |&#x2611; Sort collections of Pages / Posts
-|[#84](https://github.com/plusjade/jekyll-bootstrap/issues/84)  |&#x2610; Detecting production mode
+# or
 
-### TODOS
+2013-09-23-welcome-to-jekyll.markdown
+```
 
-Review existing pull requests against plusjake/jekyll-bootstrap:master. Merge or close each.
+Inside the file of it,
 
-* Create twitter account. Add link / icon on jekyllbootstrap.com.
-* Create blog posts under plusjade/gh-pages, expose on jekyllbootstrap.com, feed to twitter account.
-* Announce state of project, announce roadmap(s), announce new versions as they’re released.
+```
+---
+layout: post                          # (require) default post layout
+title: "Your Title"                   # (require) a string title
+date: 2016-04-20 19:51:02 +0700       # (require) a post date
+categories: [python, django]          # (custom) some categories, but makesure these categories already exists inside path of `category/`
+tags: [foo, bar]                      # (custom) tags only for meta `property="article:tag"`
+image: Broadcast_Mail.png             # (custom) image only for meta `property="og:image"`, save your image inside path of `static/img/_posts`
+---
 
-## Contributing
-
-
-To contribute to the framework please make sure to checkout your branch based on `jb-development`!!
-This is very important as it allows me to accept your pull request without having to publish a public version release.
-
-Small, atomic Features, bugs, etc.
-Use the `jb-development` branch but note it will likely change fast as pull requests are accepted.
-Please rebase as often as possible when working.
-Work on small, atomic features/bugs to avoid upstream commits affecting/breaking your development work.
-
-For Big Features or major API extensions/edits:
-This is the one case where I'll accept pull-requests based off the master branch.
-This allows you to work in isolation but it means I'll have to manually merge your work into the next public release.
-Translation : it might take a bit longer so please be patient! (but sincerely thank you).
-
-**Jekyll-Bootstrap Documentation Website.**
-
-The documentation website at <http://jekyllbootstrap.com> is maintained at https://github.com/plusjade/jekyllbootstrap.com
+# your content post with markdown syntax goes here...
+```
 
 
-## License
+#### Installing in your local
 
-[MIT](http://opensource.org/licenses/MIT)
+```
+bundle install
+jekyll serve
+```
+
+### Contributing
+
+Feel free to [open a bug](https://github.com/agusmakmun/agusmakmun.github.io/issues) or [contribute to code](https://github.com/agusmakmun/agusmakmun.github.io/pulls)!
