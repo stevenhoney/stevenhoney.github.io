@@ -128,10 +128,11 @@ layout: compress
                 <li><a href="{{ link.link }}" target="_blank"><i class="fa {{ link.icon }}"></i></a></li>
               {% endfor %}
             </ul>
-          </div><div class="languages">
+          </div>
+          <div class="social languages">
             <ul>
               {% for link in site.native %}
-                <i class="fa {{ link.icon }}" alt="{{ link.alt-text }}"></i>
+                <li><i class="fa {{ link.icon }}" alt="{{ link.alt-text }}"></i></li>
               {% endfor %}
             </ul>
             <ul>
