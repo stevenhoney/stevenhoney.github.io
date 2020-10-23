@@ -39,6 +39,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.author-name a {
+  color: #999;
+}
+
 /* Layout */
 .main-layout {
   background: #fff;
@@ -54,6 +58,10 @@ a:hover {
 .sidebar-nav li::before {
   content: "»";
   margin-right: .5em;
+}
+
+.posts {
+  margin-top: 30px;
 }
 
 /* Content */
@@ -84,7 +92,7 @@ footer {
 
 /* Left column */
 div.col-sm-3 {
-  margin-top: 100px;
+  margin-top: 10px;
   font-size: 11px;
   color: #666;
 }
