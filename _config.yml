@@ -12,7 +12,7 @@ tagarray: []
 collections:
   project:  
     output: true
-    permalink: /project/:path/
+    permaalt-text: /project/:path/
 
 social: 
     - icon: fa-linkedin
@@ -21,6 +21,30 @@ social:
       link: "https://github.com/stevenhoney"
     - icon: fa-wordpress
       link: "https://profiles.wordpress.org/stevehoneynz/"
+
+native: 
+    - icon: fa-shopify
+      alt-text: Liquid / Shopify API
+    - icon: fa-js
+      alt-text: Javascript
+    - icon: fa-css
+      alt-text: SCSS
+
+fluent: 
+    - icon: fa-linkedin
+      alt-text: "https://www.linkedin.com/in/steve-honey-9957924a/"
+    - icon: fa-github
+      alt-text: "https://github.com/stevenhoney"
+    - icon: fa-wordpress
+      alt-text: "https://profiles.wordpress.org/stevehoneynz/"
+
+conversational: 
+    - icon: fa-linkedin
+      alt-text: "https://www.linkedin.com/in/steve-honey-9957924a/"
+    - icon: fa-github
+      alt-text: "https://github.com/stevenhoney"
+    - icon: fa-wordpress
+      alt-text: "https://profiles.wordpress.org/stevehoneynz/"
 
 share:
   twitter_username:

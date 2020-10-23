@@ -85,6 +85,8 @@ layout: compress
 
     <!-- Font awesome icons -->
     <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- Devicon icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@master/devicon.min.css">
     <!-- syntax highlighting CSS -->
     <link rel="stylesheet" href="/static/css/syntax.css">
     <!-- Bootstrap core CSS -->
@@ -126,10 +128,22 @@ layout: compress
                 <li><a href="{{ link.link }}" target="_blank"><i class="fa {{ link.icon }}"></i></a></li>
               {% endfor %}
             </ul>
-          </div>
-          <div class="search" id="js-search">
-            <input type="text" placeholder="(sitemap)~$ type to search" class="search__input form-control" id="js-search__input">
-            <ul class="search__results" id="js-search__results"></ul>
+          </div><div class="languages">
+            <ul>
+              {% for link in site.native %}
+                <i class="fa {{ link.icon }}" alt="{{ link.alt-text }}"></i>
+              {% endfor %}
+            </ul>
+            <ul>
+              {% for link in site.fluent %}
+                <li><a href="{{ link.link }}" target="_blank"><i class="fa {{ link.icon }}"></i></a></li>
+              {% endfor %}
+            </ul>
+            <ul>
+              {% for link in site.conversational %}
+                <li><a href="{{ link.link }}" target="_blank"><i class="fa {{ link.icon }}"></i></a></li>
+              {% endfor %}
+            </ul>
           </div>
           <hr />
           <ul class="sidebar-nav">
