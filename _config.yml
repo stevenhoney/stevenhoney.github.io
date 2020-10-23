@@ -3,8 +3,8 @@ description: A collection of notes to myself that might help others.
 author: Steve Honey
 github: https://github.com/stevenhoney
 about: 
-disqus_shortname: stackproblems
-google_analytics: UA-XXXXXXXX-Y
+disqus_shortname:
+google_analytics:
 
 enableTags: true
 tagarray: []
@@ -19,18 +19,18 @@ social:
       link: "#"
     - icon: fa-github
       link: "https://github.com/stevenhoney"
+    - icon: fa-wordpress
+      link: "https://profiles.wordpress.org/stevehoneynz/"
 
 share:
   twitter_username:
   fb_appid:
 
 urls:
-    - text: About Me
+    - text: About
       url: /about/
-    - text: My Projects
-      url: /projects/
-    - text: XML Feed
-      url: /feed.xml
+    - text: Contact
+      url: /contact/
 
 url: "https://stevenhoney.github.io"
 baseurl: ""
