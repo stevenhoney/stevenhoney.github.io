@@ -2,7 +2,7 @@
 layout: page
 title: About
 permalink: /about/
-
+---
 
 I am a developer first, experienced in a variety of stacks and languages. I most enjoy projects/roles that allow me to work across frontend, backend and integration. I enjoy beautifully structured JSON as much as I enjoy building fast responsive web UX. 
 I believe my broad life experience and appetite for efficient, elegant problem solving give me a unique edge.
