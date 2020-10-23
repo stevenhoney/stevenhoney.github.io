@@ -2,7 +2,7 @@ title: Steve Honey
 description: A collection of notes to myself that might help others.
 author: Steve Honey
 github: https://github.com/stevenhoney
-about: 
+about: A collection of notes to myself that might help others.
 disqus_shortname:
 google_analytics:
 
@@ -10,7 +10,7 @@ enableTags: true
 tagarray: []
 
 collections:
-  project:
+  project:  
     output: true
     permalink: /project/:path/
 

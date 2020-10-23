@@ -4,10 +4,6 @@ title:  "Excel VBA <-> Shopify Gift Card API Tool"
 date:   2020-10-24 00:00:00 +1300
 tags: [Shopify,Shopify Plus,Excel]
 ---
-# Excel Shopify Gift Card Tool
----
-
-### What
 A macro enabled Excel workbook (XLSM) which will create a gift voucher per line in a Shopify Plus store using entered details (you must have a Plus level subscription to use the Gift Card API). Connects to Shopify via a private app which the user must first create (see Getting Started below).
 
 ### Why
@@ -26,15 +22,17 @@ I half finished this to help me migrate gift cards from our legacy system when m
 7. You will now have an API Key and Password which can be entered in the corresponding cells on the Settings tab of the workbook.
 
 ## Using the Tool
+  
 
-#### Settings
+### Settings
 All that is required are your Private App's API Key and Password from the step above and your xxxx.myshopify.com domain (just the xxxx bit).
 
-<img src="https://github.com/stevenhoney/excel-shopify-gift-card-tool/blob/master/Screenshot-1.png" width="400px" />
+![Screenshot-1]
 
 (No, I haven't uploaded valid credentials in a screenshot here, don't worry!)
+  
 
-#### Inputting Cards to Be Generated
+### Inputting Cards to Be Generated
 Five columns are used to create each gift card and form the body of each post to the API, all except the Value column are **optional**:
 
 ![Screenshot-2]
@@ -51,9 +49,9 @@ Five columns are used to create each gift card and form the body of each post to
   Like `3363246964811` This is the number after the last / in the URL when viewing the customer record in the Shopify admin. Unfortunately Shopify does not include this in their default customer export, so a 3rd party app is needed in order to export Customer IDs to be used to assign gift cards to customers. I use and highly recommend [Excelify.io](https://excelify.io/) but there are [lots of alternatives](https://apps.shopify.com/search?q=csv+export#).
   
   When you assign a gift card to an existing customer it is sent to them via email immediately on creation, if you have their mobile/cell number in Shopify they will also be delivered via SMS.
-  
+
 ## API Rate Limiting
-The VBA script has a 0.5 second ause built in between calls (eg creating 100 gift cards should take just over 50 seconds~). At some upper number you will eventually hit a limit, I haven't dug into what that would be. At a total guess-timate creating a batch of a 1000 shouldn't be an issue, 10,000 might start stretching things? The script will show in the 'Tool Status' column clearly on what row/call any limit is reached - you could then delete the successful lines, wait a little and re-run again, repeat until done.
+The VBA script has a 0.5 second pause built in between calls (eg creating 100 gift cards should take just over 50 seconds~). At some upper number you will eventually hit a limit, I haven't dug into what that would be. At a total guess-timate creating a batch of a 1000 shouldn't be an issue, 10,000 might start stretching things? The script will show in the 'Tool Status' column clearly on what row/call any limit is reached - you could then delete the successful lines, wait a little and re-run again, repeat until done.
 
 ## Security
 You really shouldn't download and run XLSM files from the internet, ever. It would be pretty easy for me to have added a line in here that sends me gift card codes for your store (I didn't). The VBA code that is used is uploaded here as a .bas file and ideally you or someone in your organization who understands VBA a little should check the code and create your own local version based upon it.
@@ -64,5 +62,5 @@ You can download the XLSM file from this repository and it will work fine, but y
 
 <sub>Credit for actually getting the VBA bit to work reliably after I nearly went mad trying goes to [this chap on Upwork](https://www.upwork.com/freelancers/~018f69f455ef453569), this is the guy you should contact if you want to extend the functionality of the tool or create something similar for another Shopify API endpoint (I'm too busy - he is super smart and available!).</sub>
 
-[Screenshot-1]: https://github.com/stevenhoney/excel-shopify-gift-card-tool/blob/master/Screenshot-1.png
-[Screenshot-2]: https://github.com/stevenhoney/excel-shopify-gift-card-tool/blob/master/Screenshot-2.png
+[Screenshot-1]: https://raw.githubusercontent.com/stevenhoney/excel-shopify-gift-card-tool/master/Screenshot-1.png
+[Screenshot-2]: https://raw.githubusercontent.com/stevenhoney/excel-shopify-gift-card-tool/master/Screenshot-2.png
