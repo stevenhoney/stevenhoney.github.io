@@ -14,7 +14,7 @@ collections:
     output: true
     permalink: /project/:path/
 
-social:
+social: 
     - icon: fa-linkedin
       link: "#"
     - icon: fa-github
