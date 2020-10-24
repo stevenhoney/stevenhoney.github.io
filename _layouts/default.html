@@ -83,8 +83,7 @@ layout: compress
       <meta name="twitter:image:src" content="{{ site.url }}/{{ page.header-img }}">
     {% endif %}
 
-    <!-- Font awesome icons -->
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/99fad65b98.js" crossorigin="anonymous"></script>
     <!-- Devicon icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@master/devicon.min.css">
     <!-- syntax highlighting CSS -->
@@ -122,6 +121,8 @@ layout: compress
               {{ site.about }}
             </div>
           {% endif %}
+          <hr>
+          <h5>Profiles</h5>
           <div class="social">
             <ul>
               {% for link in site.social %}
@@ -129,17 +130,22 @@ layout: compress
               {% endfor %}
             </ul>
           </div>
-          <div class="social languages">
+          <hr>
+          <h5>Languages/Platforms</h5>
+          <div class="social">
+            <h6>Native</h6>
             <ul>
               {% for link in site.native %}
-                <li><i class="fa {{ link.icon }}" alt="{{ link.alt-text }}"></i></li>
+                <li><a class="langauge-icon" title="{{ link.alt-text }}"><i class="fab {{ link.icon }}"></i></a></li>
               {% endfor %}
             </ul>
+            <h6>Fluent</h6>
             <ul>
               {% for link in site.fluent %}
                 <li><a href="{{ link.link }}" target="_blank"><i class="fa {{ link.icon }}"></i></a></li>
               {% endfor %}
             </ul>
+            <h6>Conversational</h6>
             <ul>
               {% for link in site.conversational %}
                 <li><a href="{{ link.link }}" target="_blank"><i class="fa {{ link.icon }}"></i></a></li>

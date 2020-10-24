@@ -24,11 +24,13 @@ social:
 
 native: 
     - icon: fa-shopify
-      alt-text: Liquid / Shopify API
+      alt-text: "Liquid / Shopify API"
     - icon: fa-js
-      alt-text: Javascript
-    - icon: fa-css
-      alt-text: SCSS
+      alt-text: "Javascript"
+    - icon: fa-php
+      alt-text: "PHP"
+    - icon: fa-wordpress-simple
+      alt-text: "WordPress - Custom themes, plugins, multisite"
 
 fluent: 
     - icon: fa-linkedin

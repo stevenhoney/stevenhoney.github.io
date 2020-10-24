@@ -140,9 +140,13 @@ div.col-sm-3 div.profile-about {
   display: inline-block;
   margin: 0 5px;
 }
-.social li a {
+.social li a .fa {
   font-size: 16px;
-  color: #969394;
+  color: #4a7cd7;
+}
+.social li a .fab {
+  font-size: 16px;
+  color: #000;
 }
 .social li a:hover {
   color: #6D6D6D;
