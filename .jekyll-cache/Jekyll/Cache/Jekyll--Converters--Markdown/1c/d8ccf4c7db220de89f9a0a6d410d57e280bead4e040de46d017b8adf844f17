@@ -1,4 +1,4 @@
-I"+<h3 id="what">What</h3>
+I"/<h3 id="what">What</h3>
 <p>A macro enabled Excel workbook (XLSM) which will create a gift voucher per line in a Shopify Plus store using entered details (you must have a Plus level subscription to use the Gift Card API). Connects to Shopify via a private app which the user must first create<!--more--> (see Getting Started below).</p>
 
 <h3 id="why">Why</h3>
@@ -52,10 +52,10 @@
   <li>
     <h5 id="shopify-customer-id">Shopify Customer ID</h5>
     <p>Like <code class="highlighter-rouge">3363246964811</code> This is the number after the last / in the URL when viewing the customer record in the Shopify admin. Unfortunately Shopify does not include this in their default customer export, so a 3rd party app is needed in order to export Customer IDs to be used to assign gift cards to customers. I use and highly recommend <a href="https://excelify.io/">Excelify.io</a> but there are <a href="https://apps.shopify.com/search?q=csv+export#">lots of alternatives</a>.</p>
+
+    <p>When you assign a gift card to an existing customer it is sent to them via email immediately on creation, if you have their mobile/cell number in Shopify they will also be delivered via SMS.</p>
   </li>
 </ul>
-
-<p>When you assign a gift card to an existing customer it is sent to them via email immediately on creation, if you have their mobile/cell number in Shopify they will also be delivered via SMS.</p>
 
 <h2 id="api-rate-limiting">API Rate Limiting</h2>
 <p>The VBA script has a 0.5 second pause built in between calls (eg creating 100 gift cards should take just over 50 seconds~). At some upper number you will eventually hit a limit, I haven’t dug into what that would be. At a total guess-timate creating a batch of a 1000 shouldn’t be an issue, 10,000 might start stretching things? The script will show in the ‘Tool Status’ column clearly on what row/call any limit is reached - you could then delete the successful lines, wait a little and re-run again, repeat until done.</p>

@@ -38,15 +38,15 @@ Five columns are used to create each gift card and form the body of each post to
 
 ![Screenshot-2]
 
-  - ##### Value
+- ##### Value
    The tool will create a voucher for every row in the Value column with a something entered. Technically this is the only required column, although it is hard to imagine a use case for just creating batches of Gift Cards with randomly generated codes.
-  - ##### Note
+- ##### Note
    A long text type field, notes are visible when viewing the gift card in the Shopify admin. Unless you have some very specific customization(s) this is for internal use only. Linebreaks and basic formatting are preserved, HTML does not work.
-  - ##### Code
+- ##### Code
    Minimum 8 characters, max 20. Alphanumeric (a-z,0-9) only, must be globally unique.
-  - ##### Template
+- ##### Template
   Like `gift_card.birthday.liquid` Shopify gift card liquid templates are effectively standalone HTML pages, a template with a "Happy Birthday" message is an obvious example.
-  - ##### Shopify Customer ID
+- ##### Shopify Customer ID
   Like `3363246964811` This is the number after the last / in the URL when viewing the customer record in the Shopify admin. Unfortunately Shopify does not include this in their default customer export, so a 3rd party app is needed in order to export Customer IDs to be used to assign gift cards to customers. I use and highly recommend [Excelify.io](https://excelify.io/) but there are [lots of alternatives](https://apps.shopify.com/search?q=csv+export#).
   
   When you assign a gift card to an existing customer it is sent to them via email immediately on creation, if you have their mobile/cell number in Shopify they will also be delivered via SMS.

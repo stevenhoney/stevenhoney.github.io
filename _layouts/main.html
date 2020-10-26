@@ -11,6 +11,19 @@ layout: default
       <div class="author-name">{{site.author}}</div>
       <p>{{site.about-author}}</p>
     </div>
+    <section class="languages-platforms">
+      <h3 class="languages-platforms-title">Languages/Platforms</h3>
+      <ul class="languages-1">
+        {% for platform in site.languages-1 %}
+          <li class="platform-icon"><a title="{{ platform.alt-text }}"><i class="fab {{ platform.icon }}"></i></a></li>
+        {% endfor %}
+      </ul>
+      <ul class="languages-2">
+        {% for platform in site.languages-2 %}
+          <li class="platform-icon"><a title="{{ platform.alt-text }}"><i class="fab {{ platform.icon }}"></i></a></li>
+        {% endfor %}
+      </ul>
+    </section> <!-- End Section Contact -->
   </header> <!-- End Header -->
   <footer>
     <section class="contact">
@@ -27,9 +40,6 @@ layout: default
         {% endif %}
       </ul>
     </section> <!-- End Section Contact -->
-    <div class="copyright">
-      <p>{{site.time | date: '%Y'}} &copy; {{site.author}}</p>
-    </div>
   </footer> <!-- End Footer -->
 </aside> <!-- End Sidebar -->
 <div class="content-box clearfix">

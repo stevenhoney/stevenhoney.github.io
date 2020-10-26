@@ -17,6 +17,61 @@ social-linkedin: steve-honey-9957924a # add your Linkedin handle
 social-wordpress: stevehoneynz
 social-email: # add your Email address
 
+# Languages/Platforms
+languages-1: 
+    - icon: fa-shopify
+      alt-text: "Liquid / Shopify APIs"
+    - icon: netsuite-icon
+      alt-text: "Netsuite: SuiteScript 2.0, SCA, Super Admin"
+    - icon: fa-js
+      alt-text: "Javascript"
+    - icon: fa-sass
+      alt-text: "SCSS"
+    - icon: fa-wordpress-simple
+      alt-text: "WordPress: Custom themes, plugins, multisite"
+
+languages-2:
+    - icon: celigo-icon
+      alt-text: "Celigo"
+    - icon: fa-magento
+      alt-text: "Magento"
+    - icon: fa-php
+      alt-text: "PHP"
+    - icon: sql-icon
+      alt-text: "SQL / MySQL / PostgreSQL"
+    - icon: power-bi-icon
+      alt-text: "Power BI / DAX"
+    - icon: fa-jira
+      alt-text: "Jira / Atlassian"
+    - icon: fa-git-alt
+      alt-text: "Git"
+    - icon: fa-bitbucket
+      alt-text: "Bitbucket"
+    - icon: fa-gulp
+      alt-text: "Gulp"
+    - icon: "devicon-webpack-plain devicon"
+      alt-text: "Webpack"
+    - icon: "devicon-grunt-plain devicon"
+      alt-text: "Grunt"
+    - icon: "devicon-bower-plain devicon"
+      alt-text: "Bower"
+    - icon: "devicon-handlebars-plain devicon"
+      alt-text: "Handlebars"
+    - icon: "devicon-bootstrap-plain devicon"
+      alt-text: "Bootstrap"
+    - icon: "devicon-foundation-plain devicon"
+      alt-text: "Foundation"
+    - icon: "fa-algolia"
+      alt-text: "Algolia"
+    - icon: "fa-dropbox"
+      alt-text: "Dropbox API"
+    - icon: "devicon-photoshop-plain devicon"
+      alt-text: "Photoshop"
+    - icon: "fa-slack"
+      alt-text: "Slack"
+    - icon: "fa-microsoft"
+      alt-text: "Microsoft: Sharepoint/Teams/o365 Admin"
+
 # Disqus
 discus-identifier: mr-brown # add your discus identifier
 
