@@ -11,7 +11,8 @@ html {
 }
 
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
   color: $body-color;
   background-color: #fbfbfb;
   margin: 0;
@@ -19,8 +20,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  font-weight: 400;
+h1, h2, h3 {
+  font-family: 'Newsreader', serif;
+  font-weight: 500;
 }
 
 img {

@@ -9,7 +9,7 @@ site-twitter: #if your site has a twitter account, enter it here
 # Author Settings
 author: Steve Honey # add your name
 author-img: profile.webp # add your photo
-about-author: I am a web developer focusing on front-end development. Always hungry to keep learning. # add description
+about-author: Experienced in front-end web dev, intergation projects, multiple ecomm, CMS and ERP platforms. # add description
 social-twitter:  # add your Twitter handle
 social-facebook: # add your Facebook handle
 social-github: stevenhoney # add your Github handle
@@ -73,7 +73,7 @@ languages-2:
       alt-text: "Microsoft: Sharepoint/Teams/o365 Admin"
 
 # Disqus
-discus-identifier: mr-brown # add your discus identifier
+discus-identifier: stevehoney # add your discus identifier
 
 # Tracker
 analytics: # Google Analytics

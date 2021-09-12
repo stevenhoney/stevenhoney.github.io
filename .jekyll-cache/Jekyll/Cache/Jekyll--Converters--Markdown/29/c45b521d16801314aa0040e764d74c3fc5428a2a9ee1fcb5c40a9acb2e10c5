@@ -1,0 +1,151 @@
+I"�e<h3 id="background">Background</h3>
+
+<p>When migrating a store from SuiteCommerce (SCA) to Shopify Plus I needed to recreate SCA’s percentage based customer price level functionality. This set up followed a fairly common pattern, whereby select groups of customers receive a fixed percentage off RRP pricing, at various tiers (30% Off, 40% Off, think VIP, GOLD, Silver etc.).</p>
+
+<p>There are many app based solutions out there aimed at wholesale or VIP tiered pricing, but I inherently don’t want to use an app for anything unless the overhead (and cost) is 100% justified. In this case some minimal frontend JS + Liquid and checkout scripts can achieve the goal without too much heavy lifting.</p>
+
+<h3 id="the-pieces">The Pieces:</h3>
+
+<ol>
+  <li>Set up your customer tags</li>
+  <li>Make additions/changes in Liquid templates</li>
+  <li>Make additions change to your themes JS files</li>
+  <li>Add your cart script</li>
+  <li>Add some other relevant script logic</li>
+</ol>
+
+<h2 id="1-set-up-tagging">1. Set up tagging</h2>
+
+<p>The easy bit! For the sake of this demo I will use some common examples:</p>
+
+<p>Wholesale - 50% off RRP</p>
+
+<p>VIP - 25% off RRP</p>
+
+<p>Friends &amp; Family - 10% off RRP</p>
+
+<p>To keep things a little tidier in the admin we’ll prefix the customer tags so we have:</p>
+
+<p><code class="highlighter-rouge">price_group:Wholsale</code></p>
+
+<p><code class="highlighter-rouge">price_group:VIP</code></p>
+
+<p><code class="highlighter-rouge">price_group:Friends Family</code></p>
+
+<p>A few points worth noting:</p>
+
+<ul>
+  <li>Following this prefix: pattern is good practice as in other contexts you may want to leverage this key:value syntax (it also more informative to your admin users).</li>
+  <li>Notice I drop the ‘&amp;’ from ‘Friends &amp; Family’ in the tag name - Shopify is very good at sanitizing things under the hood, but adding unecessary special characters into your world should always be avoided.</li>
+  <li>This is a perfectly valid use case for customer metafields (in fact the production version of this code uses a metafield for price tier), however if a store is not already utilising metafields (and an associated metafield management app) then it’s not a necessary additional step/complexity: tags work just fine for simple use cases, and are more easily used for integrations (say, email segments based on your tiers).</li>
+</ul>
+
+<h2 id="2-liquid-template-editing">2. Liquid template editing</h2>
+
+<h3 id="global---layoutthemeliquid">Global - layout/theme.liquid</h3>
+
+<p>The first thing we will do is to is include a snippet in the head of the theme.liquid to output some Liquid variables / JS const globally that will be used to calculate pricing. The below goes somewhere near the closing <code class="highlighter-rouge">&lt;/head&gt;</code> tag.</p>
+
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">is_cg_account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">cg_discount_multiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">%}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">customer</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{%</span><span class="w"> </span><span class="nt">for</span><span class="w"> </span><span class="nv">tag</span><span class="w"> </span><span class="nt">in</span><span class="w"> </span><span class="nv">customer.tags</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">tag_split</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">tag</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">split</span><span class="p">:</span><span class="w"> </span><span class="s2">":"</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">tag_split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"price_group"</span><span class="w"> </span><span class="p">%}</span>
+      <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">price_group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">tag_split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="p">%}</span>
+      <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">price_group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Wholesale"</span><span class="w"> </span><span class="p">%}</span>
+        <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">is_cg_account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">%}</span>
+        <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">cg_discount_multiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="p">%}</span>
+      <span class="p">{%</span><span class="w"> </span><span class="kr">elsif</span><span class="w"> </span><span class="nv">price_group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"VIP"</span><span class="w"> </span><span class="p">%}</span>
+        <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">is_cg_account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">%}</span>
+        <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">cg_discount_multiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="p">%}</span>
+      <span class="p">{%</span><span class="w"> </span><span class="kr">elsif</span><span class="w"> </span><span class="nv">price_group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Friends Family"</span><span class="w"> </span><span class="p">%}</span>
+        <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">is_cg_account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">%}</span>
+        <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">cg_discount_multiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.9</span><span class="w"> </span><span class="p">%}</span>
+      <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="nt">endfor</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+&lt;script&gt;
+var is_cg_account = "<span class="p">{{</span><span class="nv">is_cg_account</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">json</span><span class="p">}}</span>"
+var cg_discount_multiplier = "<span class="p">{{</span><span class="nv">cg_discount_multiplier</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">json</span><span class="p">}}</span>";
+&lt;/script&gt;
+</code></pre></div></div>
+<p>Things to note:</p>
+<ul>
+  <li>The multipliers are ‘inverted’ for simplicty; because 100*0.75 is easier than 100-(100*0.25).</li>
+  <li>The <code class="highlighter-rouge">| json</code> filter here is a shorthand way to reliably pass liquid objects and variables into JS. Even though we are only passing one boolean and one decimal integer in this case, it’s good practice to always use <code class="highlighter-rouge">| json</code> when surfacing anything from Liquid to frontend JS.</li>
+</ul>
+
+<p><em>The following Liquid template updates are not strictly necessary on many themes: your pricing display is likely oveidden with JS on the frontend anyway. But as an insurance against flashes of different prices etc. you can render the discounted price in Liquid first. Also the logic is the same in both the Liquid and frontend JS rendering of discounts,but the Liquid version is more readable, so a good intro.</em></p>
+
+<h3 id="pdp---sectionsproduct-templateliquid">PDP - sections/product-template.liquid</h3>
+
+<p>This will vary a little theme by theme, but you will have something that looks like this in your product-template.liquid file (or a snippet rendered within that file). This example is from the Turbo theme by Out of the Sandbox.</p>
+
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">available</span><span class="w"> </span><span class="p">%}</span>
+&lt;span class="was_price"&gt;
+  &lt;span class="money"&gt;<span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money</span><span class="w"> </span><span class="p">}}</span>&lt;/span&gt;
+&lt;/span&gt;
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+&lt;span itemprop="price" content="<span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money_without_currency</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">remove</span><span class="p">:</span><span class="w"> </span><span class="s2">" ,"</span><span class="w"> </span><span class="p">}}</span>" class="<span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">%}</span>sale<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>"&gt;
+  &lt;span class="current_price <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">product</span><span class="p">.</span><span class="nv">available</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">%}</span>hidden<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>"&gt;
+  <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">%}</span>
+    &lt;span class="money"&gt;<span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money</span><span class="w"> </span><span class="p">}}</span>&lt;/span&gt;
+  <span class="p">{%</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{{</span><span class="w"> </span><span class="nv">settings</span><span class="p">.</span><span class="nv">free_price_text</span><span class="w"> </span><span class="p">}}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+    &lt;/span&gt;
+  &lt;/span&gt;
+  <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">section</span><span class="p">.</span><span class="nv">settings</span><span class="p">.</span><span class="nv">display_savings</span><span class="w"> </span><span class="p">%}</span>
+  &lt;p&gt;
+    &lt;span class="sale savings"&gt;
+    <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">available</span><span class="w"> </span><span class="p">%}</span> 
+      <span class="p">{{</span><span class="w"> </span><span class="s1">'products.product.savings'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">t</span><span class="w"> </span><span class="p">}}</span> <span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">minus</span><span class="p">:</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">times</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">divided_by</span><span class="p">:</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">}}</span>% (&lt;span class="money"&gt;<span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">minus</span><span class="p">:</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money</span><span class="w"> </span><span class="p">}}</span>&lt;/span&gt;)
+    <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+    &lt;/span&gt;
+  &lt;/p&gt;
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+</code></pre></div></div>
+<p>This get replaced with the below:</p>
+
+<div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">is_cg_account</span><span class="w"> </span><span class="p">%}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">cg_discount_price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">times</span><span class="p">:</span><span class="w"> </span><span class="nv">cg_discount_multiplier</span><span class="w"> </span><span class="p">%}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">cg_discount_price</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">price</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{%</span><span class="w"> </span><span class="nt">assign</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">cg_discount_price</span><span class="w"> </span><span class="p">%}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+<span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">available</span><span class="w"> </span><span class="p">%}</span>
+&lt;span class="was_price"&gt;
+  &lt;span class="money"&gt;<span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money</span><span class="w"> </span><span class="p">}}</span>&lt;/span&gt;
+&lt;/span&gt;
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+&lt;span itemprop="price" content="<span class="p">{{</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money_without_currency</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">remove</span><span class="p">:</span><span class="w"> </span><span class="s2">" ,"</span><span class="w"> </span><span class="p">}}</span>" class="<span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="p">%}</span>sale<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>"&gt;
+  &lt;span class="current_price <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">product</span><span class="p">.</span><span class="nv">available</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">%}</span>hidden<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>"&gt;
+  <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">%}</span>
+    &lt;span class="money"&gt;<span class="p">{{</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money</span><span class="w"> </span><span class="p">}}</span>&lt;/span&gt;
+  <span class="p">{%</span><span class="w"> </span><span class="kr">else</span><span class="w"> </span><span class="p">%}</span>
+    <span class="p">{{</span><span class="w"> </span><span class="nv">settings</span><span class="p">.</span><span class="nv">free_price_text</span><span class="w"> </span><span class="p">}}</span>
+  <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+    &lt;/span&gt;
+  &lt;/span&gt;
+  <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">section</span><span class="p">.</span><span class="nv">settings</span><span class="p">.</span><span class="nv">display_savings</span><span class="w"> </span><span class="p">%}</span>
+  &lt;p&gt;
+    &lt;span class="sale savings"&gt;
+    <span class="p">{%</span><span class="w"> </span><span class="kr">if</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">available</span><span class="w"> </span><span class="p">%}</span> 
+      <span class="p">{{</span><span class="w"> </span><span class="s1">'products.product.savings'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">t</span><span class="w"> </span><span class="p">}}</span> <span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">minus</span><span class="p">:</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">times</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">divided_by</span><span class="p">:</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">}}</span>% (&lt;span class="money"&gt;<span class="p">{{</span><span class="w"> </span><span class="nv">variant</span><span class="p">.</span><span class="nv">compare_at_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">minus</span><span class="p">:</span><span class="w"> </span><span class="nv">final_price</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">money</span><span class="w"> </span><span class="p">}}</span>&lt;/span&gt;)
+    <span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+    &lt;/span&gt;
+  &lt;/p&gt;
+<span class="p">{%</span><span class="w"> </span><span class="kr">endif</span><span class="w"> </span><span class="p">%}</span>
+</code></pre></div></div>
+<p>Things to note:</p>
+<ul>
+  <li>In essence we capture the product price in our own temp variable, then discount that price based on the global parameters we added in the first step if they are present.</li>
+  <li>We allow for the possibilty of the public on site price being lower than the customer group discount off RRP, and always use the lower price: <code class="highlighter-rouge">if cg_discount_price &lt; variant.price</code></li>
+</ul>
+
+<script src="https://gist.github.com/stevenhoney/0c9dc2721f6e7bcbb1d61f0ffc295ad0/revisions?diff=split"></script>
+
+:ET

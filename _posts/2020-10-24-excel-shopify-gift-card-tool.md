@@ -4,6 +4,8 @@ title:  "Excel VBA <-> Shopify Gift Card API Tool"
 date:   2020-10-24 00:00:00 +1300
 tags: [Shopify,Shopify Plus,Excel]
 ---
+The below is just a copy of the readme.md file for this project [on github here](https://github.com/stevenhoney/excel-shopify-gift-card-tool).
+
 ### What
 A macro enabled Excel workbook (XLSM) which will create a gift voucher per line in a Shopify Plus store using entered details (you must have a Plus level subscription to use the Gift Card API). Connects to Shopify via a private app which the user must first create<!--more--> (see Getting Started below).
 
